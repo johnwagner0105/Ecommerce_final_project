@@ -119,6 +119,10 @@ class SaleCreateView(generics.CreateAPIView):
                 quantity = item['quantity']
                 product = ProductModel.objects.get(id=productId)
 
+                if product.stock < quantity:
+                    raise Exception(
+                        f'No hay suficiente stock para el producto {product.name}')
+
                 product.stock -= quantity
                 product.save()
 
