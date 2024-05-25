@@ -13,6 +13,7 @@ from pathlib import Path
 from cloudinary import config
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 
 load_dotenv()
 
@@ -29,7 +30,7 @@ SECRET_KEY = 'django-insecure-qx(f71nzn-5yxr0nbk53-qv(m=&_bajfm(17cq#r8$dn$u&p8r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ecommerce-final-project-uqz4.onrender.com']
+ALLOWED_HOSTS = ['ecommerce-final-project-uqz4.onrender.com', '*']
 
 
 # Application definition
@@ -153,3 +154,5 @@ CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = 'gestion.UsuarioModel'
 
 STATIC_ROOT = BASE_DIR / 'staticos'
+
+SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(minutes=30), }
