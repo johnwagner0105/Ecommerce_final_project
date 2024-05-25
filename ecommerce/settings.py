@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
@@ -150,3 +151,5 @@ config(
 CORS_ALLOW_ALL_ORIGINS = True
 
 AUTH_USER_MODEL = 'gestion.UsuarioModel'
+
+STATIC_ROOT = BASE_DIR / 'staticos'
