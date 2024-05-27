@@ -46,7 +46,7 @@ class UsuarioModel(AbstractBaseUser, PermissionsMixin):
 class SaleModel(models.Model):
     id = models.AutoField(primary_key=True)
     total = models.FloatField()
-    # user = models.ForeignKey(UsuarioModel, on_delete=models.CASCADE)
+    user = models.ForeignKey(UsuarioModel, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'sales'

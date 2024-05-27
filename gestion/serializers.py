@@ -9,6 +9,8 @@ class userSerializer(serializers.ModelSerializer):
 
 
 class productSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = ProductModel
         fields = "__all__"
@@ -54,7 +56,7 @@ class productUpdateSerializer(serializers.ModelSerializer):
 class SaleDetailCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SaleDetailModel
-        exclude = ['sale_id']
+        exclude = ['sale_id', 'price', 'subtotal']
 
 
 class SaleCreateSerializer(serializers.ModelSerializer):
@@ -62,4 +64,4 @@ class SaleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SaleModel
-        fields = '__all__'
+        exclude = ['user', 'total']

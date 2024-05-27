@@ -100,24 +100,28 @@ class SaleView(generics.ListAPIView):
 class SaleCreateView(generics.CreateAPIView):
     queryset = SaleModel.objects.all()
     serializer_class = SaleCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         try:
             data = request.data
 
+            user = request.user
+
             serializer = self.serializer_class(data=data)
             serializer.is_valid(raise_exception=True)
 
-            sale = SaleModel.objects.create(total=data['total'])
-            sale.save()
+            sale = SaleModel.objects.create(total=0, user=user)
+            total = 0
 
             items = []
 
             for item in data['details']:
                 productId = item['products_id']
-                quantity = item['quantity']
                 product = ProductModel.objects.get(id=productId)
+                quantity = item['quantity']
+                price = product.price
 
                 if product.stock < quantity:
                     raise Exception(
@@ -126,15 +130,23 @@ class SaleCreateView(generics.CreateAPIView):
                 product.stock -= quantity
                 product.save()
 
+                subtotal = float(quantity)*float(price)
+
+                total += subtotal
+
                 saleDetail = SaleDetailModel.objects.create(
                     quantity=quantity,
-                    price=item['price'],
-                    subtotal=item['subtotal'],
+                    price=price,
+                    subtotal=subtotal,
                     products_id=product,
                     sale_id=sale
                 )
 
                 saleDetail.save()
+
+            sale.total = total
+            sale.save()
+
             return response.Response({
                 'message': 'Venta realizada correctamente'
             }, status=status.HTTP_200_OK)
