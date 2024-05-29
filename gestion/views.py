@@ -26,7 +26,7 @@ class CreateUserView(generics.CreateAPIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CreateProductView(generics.ListCreateAPIView):
+class CreateProductView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = ProductModel.objects.all()
     serializer_class = productSerializer
@@ -45,6 +45,10 @@ class CreateProductView(generics.ListCreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+
+class ListProductView(generics.ListAPIView):
+    queryset = ProductModel.objects.all()
+    serializer_class = productSerializer
 
 # class ProductUploadImageView(generics.GenericAPIView):
 #     serializer_class = productSerializer
