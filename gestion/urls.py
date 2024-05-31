@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CreateProductView, DeleteProductView, SaleCreateView, SaleView, UpdateProductView,  CreateUserView, ListProductView
+from .views import RetrieveProductView, CreateProductView, DeleteProductView, SaleCreateView, SaleView, UpdateProductView,  CreateUserView, ListProductView, CustomTokenObtainPairView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 urlpatterns = [
@@ -11,5 +11,6 @@ urlpatterns = [
     path('createsale', SaleCreateView.as_view()),
     path('mostrarsales', SaleView.as_view()),
     path('createuser', CreateUserView.as_view()),
-    path('login', TokenObtainPairView.as_view())
+    path('login', CustomTokenObtainPairView.as_view()),
+    path('retrieveproduct/<int:pk>', RetrieveProductView.as_view())
 ]

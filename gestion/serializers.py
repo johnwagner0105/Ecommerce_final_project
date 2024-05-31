@@ -1,5 +1,15 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import Token
 from .models import ProductModel, SaleDetailModel, SaleModel, UsuarioModel
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['name'] = user.nombre
+        return token
 
 
 class userSerializer(serializers.ModelSerializer):
@@ -9,6 +19,12 @@ class userSerializer(serializers.ModelSerializer):
 
 
 class productSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductModel
+        fields = "__all__"
+
+
+class productListSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
 
     class Meta:
@@ -23,6 +39,23 @@ class productSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         return obj.image.url if obj.image else None
+
+
+class productCreateSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProductModel
+        fields = "__all__"
+
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     if instance.image:
+    #         representation['image'] = instance.image
+    #     return representation
+
+    def get_image(self, obj):
+        return obj.image
 
 
 class saleDetailSerializer(serializers.ModelSerializer):

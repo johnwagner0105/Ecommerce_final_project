@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from rest_framework import generics, response, status, request, permissions
 from .models import ProductModel, SaleDetailModel, SaleModel, UsuarioModel
-from .serializers import productSerializer, saleDetailSerializer, saleSerializer, productUpdateSerializer, SaleCreateSerializer, SaleDetailCreateSerializer, userSerializer
+from .serializers import productSerializer, productCreateSerializer, productListSerializer, saleDetailSerializer, saleSerializer, productUpdateSerializer, SaleCreateSerializer, SaleDetailCreateSerializer, userSerializer, CustomTokenObtainPairSerializer
 from django.db import transaction
 from cloudinary import uploader
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 # Create your views here.
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -29,7 +34,7 @@ class CreateUserView(generics.CreateAPIView):
 class CreateProductView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = ProductModel.objects.all()
-    serializer_class = productSerializer
+    serializer_class = productCreateSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -48,7 +53,12 @@ class CreateProductView(generics.CreateAPIView):
 
 class ListProductView(generics.ListAPIView):
     queryset = ProductModel.objects.all()
-    serializer_class = productSerializer
+    serializer_class = productListSerializer
+
+
+class RetrieveProductView(generics.RetrieveAPIView):
+    queryset = ProductModel.objects.all()
+    serializer_class = productListSerializer
 
 # class ProductUploadImageView(generics.GenericAPIView):
 #     serializer_class = productSerializer
